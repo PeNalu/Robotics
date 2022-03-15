@@ -42,14 +42,12 @@ while cap.isOpened():
         pause = not pause
 
 
-
 if recording:
     annotationText = input("Enter annotation text: ")
     annotations.append((startFrame, cap.get(7), annotationText))
     recording = False
 
 print("End!!!")
-
 
 cap = cv2.VideoCapture(videoPath)
 frame_size = int(cap.get(3)), int(cap.get(4))
