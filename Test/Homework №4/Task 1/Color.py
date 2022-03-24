@@ -11,7 +11,7 @@ def getpixel(x, y, h, s, v, ratio):
     h += h1 / ratio
     s += s1 / ratio
     v += v1 / ratio
-    return (s, h, v)
+    return s, h, v
 
 
 def onedimensionalwindow(x, y, img, width, ratio):
@@ -24,7 +24,7 @@ def onedimensionalwindow(x, y, img, width, ratio):
     if x < width - 1:
         (h, s, v) = getpixel(x + 1, y, h, s, v, ratio)
 
-    return (h, s, v)
+    return h, s, v
 
 
 def twodimensionalwindow(x, y, img, width, height, ratio):
@@ -51,7 +51,7 @@ def twodimensionalwindow(x, y, img, width, height, ratio):
         if y < height - 1:
             (h, s, v) = getpixel(x + 1, y + 1, h, s, v, ratio)
 
-    return (h, s, v)
+    return h, s, v
 
 def sp_noise(image, prob):
     output = image.copy()
@@ -71,9 +71,6 @@ def sp_noise(image, prob):
     output[probs > 1 - (prob / 2)] = white
     return output
 
-
-# cv2.imshow("My Filter", copyImg)
-
 while True:
     noiseImg = sp_noise(img, probability)
     copyNoiseImg = noiseImg.copy()
@@ -85,49 +82,34 @@ while True:
     # for x in range(width):
     #     for y in range(height):
     #         copyImg[x, y] = twodimensionalwindow(x, y, copyNoiseImg, width, height, 9)
-
-    (width, height) = noiseImg.shape[:2]
-    copyImg = noiseImg.copy()
-    for x in range(width):
-        for y in range(height):
-            copyImg[x, y] = onedimensionalwindow(x, y, copyNoiseImg, width, 5)
-
+    #
+    # (width, height) = noiseImg.shape[:2]
+    # copyImg = noiseImg.copy()
+    # for x in range(width):
+    #     for y in range(height):
+    #         copyImg[x, y] = onedimensionalwindow(x, y, copyNoiseImg, width, 5)
+    #
     # copyImg = cv2.medianBlur(copyImg, 9)
-    cv2.imshow("My Filter", copyImg)
+    # copyImg = cv2.medianBlur(copyImg, 9)
+    # cv2.imshow("My Filter", copyImg)
 
-    # blurImg = cv2.blur(copyNoiseImg, (5, 5))
-    # cv2.imshow("Blur", blurImg)
-    #
-    # gaussBlurImg = cv2.GaussianBlur(copyNoiseImg, (5, 5), cv2.BORDER_DEFAULT)
-    # cv2.imshow("GaussianBlur", gaussBlurImg)
-    #
-    # medianBlurImg = cv2.medianBlur(copyNoiseImg, 7)
-    # cv2.imshow("MedianBlur", medianBlurImg)
-    #
-    # bilateralImg = cv2.bilateralFilter(copyNoiseImg, 50, 10, 10)
-    # cv2.imshow("Bilateral", bilateralImg)
+    blurImg = cv2.blur(copyNoiseImg, (5, 5))
+    cv2.imshow("Blur", blurImg)
+
+    gaussBlurImg = cv2.GaussianBlur(copyNoiseImg, (5, 5), cv2.BORDER_DEFAULT)
+    cv2.imshow("GaussianBlur", gaussBlurImg)
+
+    medianBlurImg = cv2.medianBlur(copyNoiseImg, 7)
+    cv2.imshow("MedianBlur", medianBlurImg)
+
+    bilateralImg = cv2.bilateralFilter(copyNoiseImg, 50, 10, 10)
+    cv2.imshow("Bilateral", bilateralImg)
 
     probability += 0.1
     cv2.waitKey(2500)
 
     if probability > 0.9:
         break
-
-# GRAYimg = cv2.cvtColor(copyImg, cv2.COLOR_BGR2GRAY)
-# HSVimg = cv2.cvtColor(copyImg, cv2.COLOR_BGR2HSV)
-# YCrCbimg = cv2.cvtColor(copyImg, cv2.COLOR_BGR2YCrCb)
-# RGBimg = cv2.cvtColor(copyImg, cv2.COLOR_BGR2RGB)
-
-# saturation = YCrCbimg[:, :, 2]
-# CUSTOMimg = cv2.applyColorMap(copyImg, cv2.COLORMAP_AUTUMN)
-
-# cv2.imshow('basic', img)
-# cv2.imshow('Gray', GRAYimg)
-# cv2.imshow('HSV', HSVimg)
-# cv2.imshow('YCrCb', YCrCbimg)
-# cv2.imshow('RGB', RGBimg)
-# cv2.imshow('Custom ', CUSTOMimg)
-# cv2.imshow('Saturation', saturation)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
